@@ -1,0 +1,66 @@
+{
+  "name": "LandOfTheRairDesktop",
+  "productName": "Land of the Rair",
+  "version": "1.1.1",
+  "description": "Play LandOfTheRair on your desktop!",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "repository": "https://github.com/landoftherair/desktop",
+  "author": "Kyle Kemp <kyle@seiyria.com>",
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.2.2",
+    "electron-prebuilt-compile": "3.0.6"
+  },
+  "dependencies": {
+    "discord-rpc": "^3.0.1",
+    "electron-compile": "^6.4.2",
+    "electron-config": "^1.0.0",
+    "electron-debug": "^1.5.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "lodash.startcase": "^4.4.0"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm",
+        "appname": "Land of the Rair",
+        "icon": "./favicon.ico",
+        "electronVersion": "3.0.6",
+        "asar": true
+      },
+      "electronWinstallerConfig": {
+        "name": "LandOfTheRair",
+        "iconUrl": "https://play.rair.land/favicon.ico"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "landoftherair",
+        "name": "desktop"
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "LandOfTheRair"
+      }
+    }
+  }
+}
