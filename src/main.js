@@ -2,7 +2,7 @@ const electron = require('electron');
 const DiscordRPC = require('discord-rpc');
 const startCase = require('lodash.startcase');
 // Module to control application life.
-const app = electron.app;
+const { app, Menu } = electron
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -31,7 +31,9 @@ function createWindow () {
   if(!opts.width) opts.width = 1024;
 
   mainWindow = new BrowserWindow(opts);
-  mainWindow.setMenu(null);
+  const menu = Menu.buildFromTemplate(menuTemplate)
+  Menu.setApplicationMenu(menu)
+
 
   mainWindow.once('ready-to-show', mainWindow.show);
 
@@ -94,6 +96,9 @@ const rpc = new DiscordRPC.Client({ transport: 'ipc' });
 const setActivity = () => {
   if(!rpc || !mainWindow) return;
 
+  //mainWindow.webContents.executeJavaScript('document.querySelector("guildButton").addEventListener("click", () => { alert("maps maps maps")})')
+  //mainWindow.webContents.executeJavaScript('alert(document.body.toString())')
+
   mainWindow.webContents.executeJavaScript('document.querySelector("webview").getWebContents().executeJavaScript("window.discordGlobalCharacter")')
     .then(function(char) {
       if(!char) {
@@ -131,3 +136,80 @@ rpc
   .catch(function(err) {
     console.error(err);
   });
+
+
+const menuTemplate = [
+  ...(process.platform == 'darwin'?[{
+        label: app.getName(),
+        submenu: [
+            { role: 'about' }
+        ]
+  }] : []),
+  {
+    label: "Extensions",
+    submenu: [
+        {
+            label: "Salvage",
+            accelerator: "CmdOrCtrl+S",
+            click(){ mainWindow.webContents.send('salvageAll')}
+        },
+        {
+            label: "Donate Gold",
+            accelerator: "CmdOrCtrl+D",
+            click(){ 
+                mainWindow.webContents.send('donateAllGold')
+            }
+        },
+        {
+          label: "Free Pull",
+          accelerator: "CmdOrCtrl+P",
+          click(){ 
+              mainWindow.webContents.send('freePull')
+          }
+        },
+        {
+          label: "Upgrade Pet",
+          click(){
+            mainWindow.webContents.send('upgradePet')
+          }
+        }
+    ]
+  },
+  {
+    role: 'editMenu'
+  },
+  {
+    label: 'Festivals',
+    submenu: [
+    {
+      label: "Gold",
+      click(){
+        mainWindow.webContents.send('startGoldFestival')
+      }
+    }, 
+    {
+      label: "XP",
+      click(){
+        mainWindow.webContents.send('startXPFestival')
+      }
+    }
+  ]
+  },
+  {
+    label: "Equipment",
+    submenu: [
+      {
+        label: "Max Gold",
+        click(){
+          mainWindow.webContents.send('optimizeEquipment', 'gold')
+        }
+      },
+      {
+        label: "Max XP",
+        click(){
+          mainWindow.webContents.send('optimizeEquipment', 'xp')
+        }
+      }
+    ]
+  }
+]
