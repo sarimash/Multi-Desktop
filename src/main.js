@@ -60,6 +60,19 @@ function createWindow () {
   });
 }
 
+function runGameLoop()
+{
+  // TODO: Eventually going to set the menu to checkboxes to choose settings. If each option is ticked, we'll run the command. 
+  // For now, we'll just hardcode what to run
+  setTimeout(()=> {mainWindow.webContents.send('optimizeEquipment', 'gold')}, 200)
+  setTimeout(()=> {mainWindow.webContents.send('startGoldFestival')}, 10000)
+  setTimeout(()=> {mainWindow.webContents.send('salvageAll')}, 20000)
+  setTimeout(()=> {mainWindow.webContents.send('upgradePet')}, 30000)
+  setTimeout(()=> {mainWindow.webContents.send('donateAllGold')}, 40000)
+  setTimeout(()=> {mainWindow.webContents.send('useAllScrolls')}, 50000)
+
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -96,9 +109,8 @@ const rpc = new DiscordRPC.Client({ transport: 'ipc' });
 const setActivity = () => {
   if(!rpc || !mainWindow) return;
 
-  //mainWindow.webContents.executeJavaScript('document.querySelector("guildButton").addEventListener("click", () => { alert("maps maps maps")})')
-  //mainWindow.webContents.executeJavaScript('alert(document.body.toString())')
-
+  runGameLoop();  
+  
   mainWindow.webContents.executeJavaScript('document.querySelector("webview").getWebContents().executeJavaScript("window.discordGlobalCharacter")')
     .then(function(char) {
       if(!char) {
@@ -128,7 +140,7 @@ rpc.on('ready', function() {
 
   setInterval(function() {
     setActivity();
-  }, 15000);
+  }, 60000);
 });
 
 rpc
@@ -172,6 +184,12 @@ const menuTemplate = [
           click(){
             mainWindow.webContents.send('upgradePet')
           }
+        },
+        {
+          label: "Use Scrolls",
+          click(){
+            mainWindow.webContents.send('useAllScrolls')
+          }
         }
     ]
   },
@@ -209,6 +227,15 @@ const menuTemplate = [
         click(){
           mainWindow.webContents.send('optimizeEquipment', 'xp')
         }
+      }
+    ]
+  },
+  {
+    label: "Personality",
+    submenu: [
+      {
+        label: "Autoscender",
+        type: "checkbox"
       }
     ]
   }

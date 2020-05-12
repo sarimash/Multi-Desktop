@@ -42,8 +42,6 @@ ipcRenderer.on('donateAllGold', () =>{
 
             }, 
             () => { console.log('Promise failed to load') })
-
-        //allWindows[i].getWebContents().webContents.loadURL(`javascript:window.__emitSocket('guild:donateresource', {'gold':${amt}})`);
     }
 })
 
@@ -74,6 +72,23 @@ ipcRenderer.on('upgradePet', ()=>{
                 setTimeout(()=> {allWindows[i].getWebContents().webContents.executeJavaScript(`window.__emitSocket('pet:upgrade', {petUpgrade:'ilpGatherQuantity'})`)}, 8200)
                 setTimeout(()=> {allWindows[i].getWebContents().webContents.executeJavaScript(`window.__emitSocket('pet:upgrade', {petUpgrade:'strongerSoul'})`)}, 9200)
                 setTimeout(()=> {allWindows[i].getWebContents().webContents.executeJavaScript(`window.__emitSocket('pet:upgrade', {petUpgrade:'soulShare'})`)}, 10200)
+            }, 
+            () => { console.log('Promise failed to load') })
+    }
+})
+
+ipcRenderer.on('useAllScrolls', () =>{
+    let allWindows = $('webview')
+    for(let i = 0; i < allWindows.length; i++){
+        allWindows[i].getWebContents().webContents.executeJavaScript('window.discordGlobalCharacter').then(
+            (prom)=>{
+                let delay = 200
+                let currentScrolls = prom.$inventoryData.buffScrolls
+                currentScrolls.forEach(element => {
+                    setTimeout(allWindows[i].getWebContents().webContents
+                    .executeJavaScript(`window.__emitSocket('item:buffscroll', {scrollId: '${element.id}'})`), delay)
+                        delay += 1000
+                })
             }, 
             () => { console.log('Promise failed to load') })
     }
