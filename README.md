@@ -1,3 +1,3 @@
-# LandOfTheRair Desktop
+# IdleLands Multibox client
 
-A desktop build for Land of the Rair.
+Sarimash's modded client for IdleLands
