@@ -64,12 +64,13 @@ function runGameLoop()
 {
   // TODO: Eventually going to set the menu to checkboxes to choose settings. If each option is ticked, we'll run the command. 
   // For now, we'll just hardcode what to run
-  setTimeout(()=> {mainWindow.webContents.send('optimizeEquipment', 'gold')}, 200)
-  setTimeout(()=> {mainWindow.webContents.send('startGoldFestival')}, 10000)
-  setTimeout(()=> {mainWindow.webContents.send('salvageAll')}, 20000)
-  setTimeout(()=> {mainWindow.webContents.send('upgradePet')}, 30000)
-  setTimeout(()=> {mainWindow.webContents.send('donateAllGold')}, 40000)
-  setTimeout(()=> {mainWindow.webContents.send('useAllScrolls')}, 50000)
+  let delay = 7000
+  setTimeout(()=> {mainWindow.webContents.send('optimizeEquipment', 'gold')}, delay)
+  setTimeout(()=> {mainWindow.webContents.send('startGoldFestival')}, delay * 2)
+  setTimeout(()=> {mainWindow.webContents.send('salvageAll')}, delay * 3)
+  setTimeout(()=> {mainWindow.webContents.send('upgradePet')}, delay * 4)
+  setTimeout(()=> {mainWindow.webContents.send('donateAllGold')}, delay * 5)
+  setTimeout(()=> {mainWindow.webContents.send('useAllScrolls')}, delay * 6)
 
 }
 
@@ -190,6 +191,15 @@ const menuTemplate = [
           click(){
             mainWindow.webContents.send('useAllScrolls')
           }
+        },
+        {
+          label: "Enforce Personalities",
+          click(){
+            mainWindow.webContents.send('enforcePersonalities', 
+              "Autoscender", 
+              Menu.getApplicationMenu().getMenuItemById("AutoscenderMenuItem").checked
+            )
+          }
         }
     ]
   },
@@ -235,6 +245,7 @@ const menuTemplate = [
     submenu: [
       {
         label: "Autoscender",
+        id: "AutoscenderMenuItem",
         type: "checkbox"
       }
     ]

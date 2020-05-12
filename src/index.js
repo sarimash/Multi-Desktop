@@ -1,7 +1,7 @@
 require('./renderer.js');
 const $ = require('jQuery')
 const electron = require('electron')
-const {ipcRenderer} = electron
+const {ipcRenderer, Menu} = electron
 const io = require('socket.io')
 
 ipcRenderer.on('salvageAll', () =>{
@@ -43,6 +43,20 @@ ipcRenderer.on('donateAllGold', () =>{
             }, 
             () => { console.log('Promise failed to load') })
     }
+})
+
+ipcRenderer.on('enforcePersonalities', (event, personality, shouldBeOn) =>{
+    console.log(`enforcing personalities! ${personality} should be on? ${shouldBeOn}`)
+    // let allWindows = $('webview')
+    // for(let i = 0; i < allWindows.length; i++){
+    //     allWindows[i].getWebContents().webContents.executeJavaScript('window.discordGlobalCharacter').then(
+    //         (prom)=>{
+    //             allWindows[i].getWebContents().webContents.executeJavaScript(`window.__emitSocket('pet:takegold', {})`);
+    //             allWindows[i].getWebContents().webContents.executeJavaScript(`window.__emitSocket('guild:donateresource', {resource: 'gold', amount: ${prom.gold}})`);
+
+    //         }, 
+    //         () => { console.log('Promise failed to load') })
+    // }
 })
 
 ipcRenderer.on('startGoldFestival', ()=>{
